@@ -22,5 +22,6 @@ typedef uint8_t ZTypeN_Byte ;
 typedef uint32_t ZTypeN_Long;
 typedef ZTypeN_Byte ZTypeN_Char;
 typedef uint64_t ZTypeN_Addr;
+typedef uint64_t ZTypeN_ArraySize;
 
 #endif /* end of include guard: _Z_TYPES_H */

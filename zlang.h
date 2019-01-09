@@ -2,7 +2,9 @@
 #define _Z_ZLANG_H
 
 #include "ztypes.h"
+#include "util.h"
 #include "object.h"
 #include "byteobject.h"
+#include "bytearrayobject.h"
 
 #endif /* end of include guard: _Z_ZLANG_H */

@@ -34,7 +34,7 @@ void ZByte_SetValue(ZObject* o, ZTypeN_SignedByte ob_val) {
 }
 
 ZObject * ZByte_New(void) {
-  ZByteObject_Flag ob_fl = {
+  ZByteObject_Flags ob_fl = {
       _false,
       _true
   };

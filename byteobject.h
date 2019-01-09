@@ -4,15 +4,15 @@
 #include "object.h"
 #include "ztypes.h"
 
-typedef struct __zbyteobjflag {
+typedef struct __zbyteobjflags {
   _ZBool neg;
   _ZBool zero;
-} ZByteObject_Flag;
+} ZByteObject_Flags;
 
 typedef struct __zbyteobj {
   ZObject_HEADER
   ZTypeN_Byte ob_val;
-  ZByteObject_Flag ob_flags;
+  ZByteObject_Flags ob_flags;
 } ZByteObject;
 
 ZObject * ZByte_New(void);
