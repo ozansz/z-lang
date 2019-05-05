@@ -12,7 +12,9 @@ typedef enum {
 typedef enum {
   ZT_None = 0,
   ZT_Byte,
-  ZT_Long
+  ZT_Long,
+  ZT_ListNode,
+  ZT_List
 } ZObjectTypeC;
 
 typedef int16_t ZTypeN_SignedByte;
