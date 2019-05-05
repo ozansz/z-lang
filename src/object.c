@@ -1,9 +1,8 @@
 #include "object.h"
 
 ZTypeN_Addr ZObject_GetID(ZObject *o) {
-  return (ZTypeN_Addr)o;
-}
+  if (o == NULL)
+    return 0;
 
-ZObjectTypeC ZObject_GetType(ZObject *o) {
-  return o->ob_type;
+  return (ZTypeN_Addr)o;
 }

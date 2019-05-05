@@ -11,6 +11,5 @@ typedef struct __zobj {
 } ZObject;
 
 ZTypeN_Addr ZObject_GetID(ZObject *o);
-ZObjectTypeC ZObject_GetType(ZObject *o);
 
 #endif /* end of include guard: _Z_OBJECT_H */
