@@ -12,9 +12,9 @@ expression
     | conditional_expression;
 
 atomic_expression
-    : constant_statement 
-    | ID
-    | S;
+    : constant_statement    #ConstExpr
+    | ID                    #IDExpr
+    | S                     #SExpr;
 
 function_call_expression
     : LPAREN function_identifier function_call_arg_list RPAREN;
@@ -85,8 +85,8 @@ lambda_body
     : LPAREN expression RPAREN;
 
 constant_statement
-    : set_statement
-    | INT;
+    : set_statement #ConstantSetExpr
+    | INT           #ConstantINTExpr;
 
 set_statement
     : LCB INT (COMMA INT)* RCB;

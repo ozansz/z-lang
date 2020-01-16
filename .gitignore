@@ -1,3 +1,7 @@
+.vscode/
+.idea/
+.idea/.gitignore
+
 # ANTLR-generated code:
 src/.antlr/
 src/*.interp
