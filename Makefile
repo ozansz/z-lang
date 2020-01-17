@@ -10,9 +10,10 @@ ir: parser
 	$(CXX) $(LLVMFLAGS) src/parser/*.cpp src/ir/*.cpp -o irgen
 
 parser:
-	$(ANTLR) $(ANTLRFLAGS) src/Z.g4 -o parser
-	mv parser/src/* parser && rm -rf parser/src
-	mv parser/ src/
+	$(ANTLR) $(ANTLRFLAGS) src/Z.g4 -o visitor
+	mv visitor/src/* src/antlr4-runtime/
+	rm -rf visitor/src/
+	rm -rf visitor/
 
 clean:
-	$(RM) src/parser irgen
+	$(RM) src/antlr4-runtime/Z*.interp src/antlr4-runtime/Z*.tokens src/antlr4-runtime/Z*.cpp src/antlr4-runtime/Z*.h irgen

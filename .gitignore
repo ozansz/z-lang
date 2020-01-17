@@ -1,6 +1,8 @@
 .vscode/
 .idea/
 .idea/.gitignore
+.DS_Store
+src/.DS_Store
 
 # ANTLR-generated code:
 src/.antlr/
