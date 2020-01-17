@@ -3,6 +3,10 @@
 .idea/.gitignore
 .DS_Store
 src/.DS_Store
+src/antlr4-runtime/Z*.interp
+src/antlr4-runtime/Z*.tokens
+src/antlr4-runtime/Z*.cpp
+src/antlr4-runtime/Z*.h
 
 # ANTLR-generated code:
 src/.antlr/
