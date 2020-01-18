@@ -121,10 +121,15 @@ antlrcpp::Any ZLLVMIRGenerator::visitPutchCall(ZParser::Function_call_expression
         return llvm::CallInst::Create(this->globals[Z_PRINTF_LINKAGE_REPR], printf_args, "", this->currentBlock());
 }
 
-//antlrcpp::Any ZLLVMIRGenerator::visitPeekCall(ZParser::Function_call_expressionContext *context) {
-//
-//}
-//
+antlrcpp::Any ZLLVMIRGenerator::visitPeekCall(ZParser::Function_call_expressionContext *context) {
+    this->DebugMsg("Generating code for Peek Call");
+
+    std::vector<llvm::Value *> indx_vect;
+
+    indx_vect.push_back(this->globals[Z_STACK_INDX_REPR]);
+    return llvm::GetElementPtrInst::CreateInBounds(this->globals[Z_STACK_REPR], indx_vect, "", this->currentBlock());
+}
+
 //antlrcpp::Any ZLLVMIRGenerator::visitPopushCall(ZParser::Function_call_expressionContext *context) {
 //
 //}
