@@ -69,6 +69,11 @@ public:
     void DebugMsg(std::string);
     void SetDebugLevel(int);
 
+    antlrcpp::Any visitPutchCall(ZParser::Function_call_expressionContext *context);
+    antlrcpp::Any visitPeekCall(ZParser::Function_call_expressionContext *context);
+    antlrcpp::Any visitPopushCall(ZParser::Function_call_expressionContext *context);
+    antlrcpp::Any visitArithmeticOp(llvm::Instruction::BinaryOps, std::vector<ZParser::ExpressionContext *> context);
+
     virtual antlrcpp::Any visitProgram(ZParser::ProgramContext *context);
     virtual antlrcpp::Any visitIDExpr(ZParser::IDExprContext *context);
     virtual antlrcpp::Any visitSExpr(ZParser::SExprContext *context);

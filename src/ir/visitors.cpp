@@ -44,7 +44,42 @@ antlrcpp::Any ZLLVMIRGenerator::visitSExpr(ZParser::SExprContext *context) {
     return llvm::GetElementPtrInst::CreateInBounds(this->globals[Z_STACK_REPR], indx_vect, "", this->currentBlock());
 }
 
-//virtual antlrcpp::Any visitFunction_call_expression(ZParser::Function_call_expressionContext *context);
+antlrcpp::Any ZLLVMIRGenerator::visitFunction_call_expression(ZParser::Function_call_expressionContext *context) {
+    std::string func_id = context->function_identifier()->getText();
+
+    this->DebugMsg("Generating code for function_call_expression (" + func_id + ")");
+
+    if (func_id == "'") {
+        return this->visitPutchCall(context);
+    } else if (func_id == "^") {
+        return this->visitPeekCall(context);
+    } else if (func_id == "<<") {
+        return this->visitPopushCall(context);
+    } else if (func_id == "+") {
+        return this->visitArithmeticOp(llvm::Instruction::Add, context->function_call_arg_list()->expression());
+    } else if (func_id == "-") {
+        return this->visitArithmeticOp(llvm::Instruction::Sub, context->function_call_arg_list()->expression());
+    } else if (func_id == "*") {
+        return this->visitArithmeticOp(llvm::Instruction::Mul, context->function_call_arg_list()->expression());
+    } else if (func_id == "/") {
+        return this->visitArithmeticOp(llvm::Instruction::SDiv, context->function_call_arg_list()->expression());
+    } else {
+        llvm::Function *function = this->module->getFunction(func_id);
+        
+        if (function == NULL)
+            this->AbortWithError("No such function: '" + func_id + "' (undeclared function)");
+
+        std::vector<llvm::Value*> args;
+        std::vector<ZParser::ExpressionContext *>::const_iterator it;
+        
+        for (it = context->function_call_arg_list()->expression().begin(); it != context->function_call_arg_list()->expression().end(); it++) {
+            args.push_back(this->visit(*it));
+        }
+
+        return llvm::CallInst::Create(function, args, "", this->currentBlock());
+    }
+}
+
 //virtual antlrcpp::Any visitConditional_expression(ZParser::Conditional_expressionContext *context);
 //virtual antlrcpp::Any visitConditional_expression_condition(ZParser::Conditional_expression_conditionContext *context);
 //virtual antlrcpp::Any visitK_expression(ZParser::K_expressionContext *context);
