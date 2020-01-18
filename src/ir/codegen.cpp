@@ -3,7 +3,7 @@
 ZLLVMIRGenerator::ZLLVMIRGenerator(ZParser::ProgramContext* ctx) {
     this->module = new llvm::Module::Module("main", GlobCtx);
     this->root = ctx;
-    this->debugLevel = 0;
+    this->debugLevel = ZIRGEN_NODEBUG;
 }
 
 antlrcpp::Any ZLLVMIRGenerator::codeGen() {
@@ -45,4 +45,8 @@ void ZLLVMIRGenerator::AbortWithError(std::string errmsg) {
 void ZLLVMIRGenerator::DebugMsg(std::string msg) {
     if (this->debugLevel > 0)
         std::cout << "[D] " << msg << std::endl;
+}
+
+void ZLLVMIRGenerator::SetDebugLevel(int level) {
+    this->debugLevel = level;
 }

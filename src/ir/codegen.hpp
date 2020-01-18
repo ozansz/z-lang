@@ -30,6 +30,9 @@
 
 #include "../antlr4-runtime/ZVisitor.h"
 
+#define ZIRGEN_NODEBUG  0
+#define ZIRGEN_DEBUG  1
+
 static llvm::LLVMContext GlobCtx;
 
 class SymbolTable {
