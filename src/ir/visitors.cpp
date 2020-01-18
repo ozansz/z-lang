@@ -13,7 +13,16 @@ antlrcpp::Any ZLLVMIRGenerator::visitProgram(ZParser::ProgramContext *context) {
     this->popBlock();
 }
 
-//virtual antlrcpp::Any visitIDExpr(ZParser::IDExprContext *context);
+antlrcpp::Any ZLLVMIRGenerator::visitIDExpr(ZParser::IDExprContext *context) {
+    std::string var_id = context->ID()->getText();
+
+    if (this->getLocals().find(var_id) == this->getLocals().end())
+        this->AbortWithError("No such ID in locals: '" + var_id + "' (undeclared variable)");
+
+    llvm::Value *var_ptr = this->getLocals()[var_id];
+    return llvm::LoadInst(var_ptr, "", false, this->currentBlock());
+}
+
 //virtual antlrcpp::Any visitSExpr(ZParser::SExprContext *context);
 //virtual antlrcpp::Any visitFunction_call_expression(ZParser::Function_call_expressionContext *context);
 //virtual antlrcpp::Any visitConditional_expression(ZParser::Conditional_expressionContext *context);
