@@ -10,21 +10,22 @@ antlrcpp::Any ZLLVMIRGenerator::codeGen() {
 }
 
 llvm::BasicBlock* ZLLVMIRGenerator::currentBlock() {
-    return this->blocks.top();
+    return this->symtabs.top()->block;
 }
 
 void ZLLVMIRGenerator::pushBlock(llvm::BasicBlock *block) {
-    this->blocks.push(block);
+    this->symtabs.push(new SymbolTable());
+    this->symtabs.top()->block = block;
 }
 
 llvm::BasicBlock* ZLLVMIRGenerator::popBlock() {
-    llvm::BasicBlock *top = this->blocks.top();
-    this->blocks.pop();
+    llvm::BasicBlock *top = this->symtabs.top()->block;
+    this->symtabs.pop();
     return top;
 }
 
-std::map<std::string, symtab_t> ZLLVMIRGenerator::getFunctionLocals() {
-    return this->func_locals;
+std::map<std::string, llvm::Value*>& ZLLVMIRGenerator::getLocals() {
+    return this->symtabs.top()->locals;
 }
 
 llvm::Type* ZLLVMIRGenerator::GetIntegerType() {

@@ -30,14 +30,17 @@
 
 #include "../antlr4-runtime/ZVisitor.h"
 
-typedef std::map<std::string, llvm::Value*> symtab_t;
-
 static llvm::LLVMContext GlobCtx;
+
+class SymbolTable {
+public:
+    llvm::BasicBlock *block;
+    std::map<std::string, llvm::Value*> locals;
+};
 
 class ZLLVMIRGenerator : public ZVisitor {
     ZParser::ProgramContext* root;
-    std::stack<llvm::BasicBlock *> blocks;
-    std::map<std::string, symtab_t> func_locals;
+    std::stack<SymbolTable *> symtabs;
     llvm::Module *module;
 
 public:
@@ -47,7 +50,7 @@ public:
     llvm::BasicBlock *currentBlock();
     void pushBlock(llvm::BasicBlock *block);
     llvm::BasicBlock *popBlock();
-    std::map<std::string, symtab_t> getFunctionLocals();
+    std::map<std::string, llvm::Value*>& getLocals();
 
     llvm::Type *GetIntegerType();
     llvm::Type *GetArrayType(uint64_t elem_count);
