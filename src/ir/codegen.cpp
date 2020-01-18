@@ -3,6 +3,7 @@
 ZLLVMIRGenerator::ZLLVMIRGenerator(ZParser::ProgramContext* ctx) {
     this->module = new llvm::Module::Module("main", GlobCtx);
     this->root = ctx;
+    this->debugLevel = 0;
 }
 
 antlrcpp::Any ZLLVMIRGenerator::codeGen() {
@@ -39,4 +40,9 @@ llvm::Type* ZLLVMIRGenerator::GetArrayType(uint64_t elem_count) {
 void ZLLVMIRGenerator::AbortWithError(std::string errmsg) {
     std::cout << std::endl << "[!] ERR: " << errmsg << std::endl;
     abort();
+}
+
+void ZLLVMIRGenerator::DebugMsg(std::string msg) {
+    if (this->debugLevel > 0)
+        std::cout << "[D] " << msg << std::endl;
 }

@@ -42,6 +42,7 @@ class ZLLVMIRGenerator : public ZVisitor {
     ZParser::ProgramContext* root;
     std::stack<SymbolTable *> symtabs;
     llvm::Module *module;
+    int debugLevel;
 
 public:
     ZLLVMIRGenerator(ZParser::ProgramContext* ctx);
@@ -56,6 +57,8 @@ public:
     llvm::Type *GetArrayType(uint64_t elem_count);
 
     void AbortWithError(std::string);
+    void DebugMsg(std::string);
+    void SetDebugLevel(int);
 
     virtual antlrcpp::Any visitProgram(ZParser::ProgramContext *context);
     virtual antlrcpp::Any visitIDExpr(ZParser::IDExprContext *context);
