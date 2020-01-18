@@ -34,6 +34,8 @@
 #define ZIRGEN_DEBUG  1
 
 #define Z_STACK_SIZE    128
+#define Z_STACK_REPR    "_S"
+#define Z_STACK_INDX_REPR   "_S_index"
 
 static llvm::LLVMContext GlobCtx;
 

@@ -8,7 +8,16 @@ antlrcpp::Any ZLLVMIRGenerator::visitProgram(ZParser::ProgramContext *context) {
     llvm::BasicBlock *entry_block = llvm::BasicBlock::Create(GlobCtx, "entry", start_func, 0);
     
     this->pushBlock(entry_block);
-    
+
+    // Initialize S and S index as global variables
+    llvm::GlobalVariable *S = new llvm::GlobalVariable(*this->module, this->GetArrayType(Z_STACK_SIZE), false,
+                                llvm::GlobalVariable::LinkageTypes::InternalLinkage, nullptr, Z_STACK_REPR);
+    llvm::Value *S_index = new llvm::GlobalVariable(*this->module, this->GetIntegerType(), false,
+                                llvm::GlobalVariable::LinkageTypes::InternalLinkage, nullptr, Z_STACK_INDX_REPR);
+
+    this->globals[Z_STACK_REPR] = S;
+    this->globals[Z_STACK_INDX_REPR] = S_index;
+
     llvm::Value *exprval = this->visit(context->expression());
     llvm::ReturnInst::Create(GlobCtx, exprval, this->currentBlock());
     
@@ -27,7 +36,10 @@ antlrcpp::Any ZLLVMIRGenerator::visitIDExpr(ZParser::IDExprContext *context) {
     return llvm::LoadInst(var_ptr, "", false, this->currentBlock());
 }
 
-//virtual antlrcpp::Any visitSExpr(ZParser::SExprContext *context);
+antlrcpp::Any ZLLVMIRGenerator::visitSExpr(ZParser::SExprContext *context) {
+
+}
+
 //virtual antlrcpp::Any visitFunction_call_expression(ZParser::Function_call_expressionContext *context);
 //virtual antlrcpp::Any visitConditional_expression(ZParser::Conditional_expressionContext *context);
 //virtual antlrcpp::Any visitConditional_expression_condition(ZParser::Conditional_expression_conditionContext *context);
