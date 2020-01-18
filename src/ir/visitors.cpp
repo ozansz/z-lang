@@ -38,6 +38,8 @@ antlrcpp::Any ZLLVMIRGenerator::visitIDExpr(ZParser::IDExprContext *context) {
 }
 
 antlrcpp::Any ZLLVMIRGenerator::visitSExpr(ZParser::SExprContext *context) {
+    this->DebugMsg("Generating code for SExpr");
+
     std::vector<llvm::Value *> indx_vect;
 
     indx_vect.push_back(this->globals[Z_STACK_INDX_REPR]);
