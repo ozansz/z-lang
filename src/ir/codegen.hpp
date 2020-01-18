@@ -55,6 +55,8 @@ public:
     llvm::Type *GetIntegerType();
     llvm::Type *GetArrayType(uint64_t elem_count);
 
+    void AbortWithError(std::string);
+
     virtual antlrcpp::Any visitProgram(ZParser::ProgramContext *context);
     virtual antlrcpp::Any visitIDExpr(ZParser::IDExprContext *context);
     virtual antlrcpp::Any visitSExpr(ZParser::SExprContext *context);

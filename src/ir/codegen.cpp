@@ -35,3 +35,8 @@ llvm::Type* ZLLVMIRGenerator::GetIntegerType() {
 llvm::Type* ZLLVMIRGenerator::GetArrayType(uint64_t elem_count) {
     return llvm::ArrayType::get(this->GetIntegerType(), elem_count);
 }
+
+void ZLLVMIRGenerator::AbortWithError(std::string errmsg) {
+    std::cout << std::endl << "[!] ERR: " << errmsg << std::endl;
+    abort();
+}
