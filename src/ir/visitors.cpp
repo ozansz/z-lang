@@ -1,6 +1,8 @@
 #include "codegen.hpp"
 
 antlrcpp::Any ZLLVMIRGenerator::visitProgram(ZParser::ProgramContext *context) {
+    this->DebugMsg("Generating code for Program");
+
     llvm::FunctionType *ftype = llvm::FunctionType::get(this->GetIntegerType(), false);
     llvm::Function *start_func = llvm::Function::Create(ftype, llvm::GlobalValue::InternalLinkage, "_start", this->module);
     llvm::BasicBlock *entry_block = llvm::BasicBlock::Create(GlobCtx, "entry", start_func, 0);
@@ -14,6 +16,8 @@ antlrcpp::Any ZLLVMIRGenerator::visitProgram(ZParser::ProgramContext *context) {
 }
 
 antlrcpp::Any ZLLVMIRGenerator::visitIDExpr(ZParser::IDExprContext *context) {
+    this->DebugMsg("Generating code for IDExpr");
+
     std::string var_id = context->ID()->getText();
 
     if (this->getLocals().find(var_id) == this->getLocals().end())
