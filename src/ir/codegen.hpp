@@ -33,6 +33,8 @@
 #define ZIRGEN_NODEBUG  0
 #define ZIRGEN_DEBUG  1
 
+#define Z_STACK_SIZE    128
+
 static llvm::LLVMContext GlobCtx;
 
 class SymbolTable {
@@ -44,6 +46,7 @@ public:
 class ZLLVMIRGenerator : public ZVisitor {
     ZParser::ProgramContext* root;
     std::stack<SymbolTable *> symtabs;
+    std::map<std::string, llvm::Value *> globals;
     llvm::Module *module;
     int debugLevel;
 
@@ -51,6 +54,7 @@ public:
     ZLLVMIRGenerator(ZParser::ProgramContext* ctx);
 
     antlrcpp::Any codeGen();
+    
     llvm::BasicBlock *currentBlock();
     void pushBlock(llvm::BasicBlock *block);
     llvm::BasicBlock *popBlock();
