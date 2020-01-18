@@ -33,7 +33,7 @@ antlrcpp::Any ZLLVMIRGenerator::visitIDExpr(ZParser::IDExprContext *context) {
         this->AbortWithError("No such ID in locals: '" + var_id + "' (undeclared variable)");
 
     llvm::Value *var_ptr = this->getLocals()[var_id];
-    return llvm::LoadInst(var_ptr, "", false, this->currentBlock());
+    return new llvm::LoadInst(var_ptr, "", false, this->currentBlock());
 }
 
 antlrcpp::Any ZLLVMIRGenerator::visitSExpr(ZParser::SExprContext *context) {
