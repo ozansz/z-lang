@@ -13,7 +13,8 @@ antlrcpp::Any ZLLVMIRGenerator::visitProgram(ZParser::ProgramContext *context) {
     llvm::GlobalVariable *S = new llvm::GlobalVariable(*this->module, this->GetArrayType(Z_STACK_SIZE), false,
                                 llvm::GlobalVariable::LinkageTypes::InternalLinkage, nullptr, Z_STACK_REPR);
     llvm::Value *S_index = new llvm::GlobalVariable(*this->module, this->GetIntegerType(), false,
-                                llvm::GlobalVariable::LinkageTypes::InternalLinkage, nullptr, Z_STACK_INDX_REPR);
+                                llvm::GlobalVariable::LinkageTypes::InternalLinkage,
+                                llvm::ConstantInt::get(this->GetIntegerType(), 0), Z_STACK_INDX_REPR);
 
     this->globals[Z_STACK_REPR] = S;
     this->globals[Z_STACK_INDX_REPR] = S_index;
@@ -37,7 +38,10 @@ antlrcpp::Any ZLLVMIRGenerator::visitIDExpr(ZParser::IDExprContext *context) {
 }
 
 antlrcpp::Any ZLLVMIRGenerator::visitSExpr(ZParser::SExprContext *context) {
+    std::vector<llvm::Value *> indx_vect;
 
+    indx_vect.push_back(this->globals[Z_STACK_INDX_REPR]);
+    return llvm::GetElementPtrInst::CreateInBounds(this->globals[Z_STACK_REPR], indx_vect, "", this->currentBlock());
 }
 
 //virtual antlrcpp::Any visitFunction_call_expression(ZParser::Function_call_expressionContext *context);
