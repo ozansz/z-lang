@@ -1,5 +1,19 @@
 #include "codegen.hpp"
 
+llvm::Function* ZLLVMIRGenerator::initializePrintfFunction() {
+    std::vector<llvm::Type*> printf_arg_types;
+    printf_arg_types.push_back(llvm::Type::getInt8PtrTy(GlobCtx));
+
+    llvm::FunctionType* printf_type = llvm::FunctionType::get(llvm::Type::getInt32Ty(GlobCtx),
+                                        printf_arg_types, true);
+    llvm::Function *func = llvm::Function::Create(printf_type, llvm::Function::ExternalLinkage,
+                                        llvm::Twine("printf"), this->module);
+    
+    func->setCallingConv(llvm::CallingConv::C);
+
+    return func;
+}
+
 antlrcpp::Any ZLLVMIRGenerator::visitProgram(ZParser::ProgramContext *context) {
     this->DebugMsg("Generating code for Program");
 
@@ -18,6 +32,13 @@ antlrcpp::Any ZLLVMIRGenerator::visitProgram(ZParser::ProgramContext *context) {
 
     this->globals[Z_STACK_REPR] = S;
     this->globals[Z_STACK_INDX_REPR] = S_index;
+
+    // Initialize and link external libc function @printf
+    llvm::Constant *format_const = llvm::ConstantDataArray::getString(GlobCtx, Z_PRINTF_FORMATTER);
+    llvm::GlobalVariable *format_string = new llvm::GlobalVariable(*this->module, llvm::ArrayType::get(this->GetIntegerType(), 3), true, llvm::GlobalValue::PrivateLinkage, format_const, ".str");
+
+    this->globals[Z_PRINTF_FORMATTER_REPR] = format_string;
+    this->globals[Z_PRINTF_LINKAGE_REPR] = this->initializePrintfFunction();
 
     llvm::Value *exprval = this->visit(context->expression());
     llvm::ReturnInst::Create(GlobCtx, exprval, this->currentBlock());
@@ -81,6 +102,36 @@ antlrcpp::Any ZLLVMIRGenerator::visitFunction_call_expression(ZParser::Function_
         return llvm::CallInst::Create(function, args, "", this->currentBlock());
     }
 }
+
+antlrcpp::Any ZLLVMIRGenerator::visitPutchCall(ZParser::Function_call_expressionContext *context) {
+        llvm::Constant *zero = llvm::Constant::getNullValue(this->GetIntegerType());
+        std::vector<llvm::Value *> indices;
+        
+        indices.push_back(zero);
+        indices.push_back(zero);
+
+        llvm::Value *format_str_ref = llvm::GetElementPtrInst::CreateInBounds(
+                                        this->globals[Z_PRINTF_FORMATTER_REPR],
+                                        indices, "", this->currentBlock());
+
+        std::vector<llvm::Value *> printf_args;
+        printf_args.push_back(format_str_ref);
+        printf_args.push_back(this->visit(context->function_call_arg_list()->expression()[0]));
+
+        return llvm::CallInst::Create(this->globals[Z_PRINTF_LINKAGE_REPR], printf_args, "", this->currentBlock());
+}
+
+//antlrcpp::Any ZLLVMIRGenerator::visitPeekCall(ZParser::Function_call_expressionContext *context) {
+//
+//}
+//
+//antlrcpp::Any ZLLVMIRGenerator::visitPopushCall(ZParser::Function_call_expressionContext *context) {
+//
+//}
+//
+//antlrcpp::Any ZLLVMIRGenerator::visitArithmeticOp(llvm::Instruction::BinaryOps, std::vector<ZParser::ExpressionContext *> context) {
+//
+//}
 
 //virtual antlrcpp::Any visitConditional_expression(ZParser::Conditional_expressionContext *context);
 //virtual antlrcpp::Any visitConditional_expression_condition(ZParser::Conditional_expression_conditionContext *context);

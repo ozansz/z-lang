@@ -37,6 +37,10 @@
 #define Z_STACK_REPR    "_S"
 #define Z_STACK_INDX_REPR   "_S_index"
 
+#define Z_PRINTF_LINKAGE_REPR   "printf"
+#define Z_PRINTF_FORMATTER  "%c"
+#define Z_PRINTF_FORMATTER_REPR "_printf_char_formatter"
+
 static llvm::LLVMContext GlobCtx;
 
 class SymbolTable {
@@ -89,4 +93,7 @@ public:
     virtual antlrcpp::Any visitConstantSetExpr(ZParser::ConstantSetExprContext *context);
     virtual antlrcpp::Any visitConstantINTExpr(ZParser::ConstantINTExprContext *context);
     virtual antlrcpp::Any visitSet_statement(ZParser::Set_statementContext *context);
+
+private:
+    llvm::Function *initializePrintfFunction();
 };
