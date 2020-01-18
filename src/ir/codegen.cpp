@@ -26,3 +26,11 @@ llvm::BasicBlock* ZLLVMIRGenerator::popBlock() {
 std::map<std::string, symtab_t> ZLLVMIRGenerator::getFunctionLocals() {
     return this->func_locals;
 }
+
+llvm::Type* ZLLVMIRGenerator::GetIntegerType() {
+    return llvm::Type::getInt64Ty(GlobCtx);
+}
+
+llvm::Type* ZLLVMIRGenerator::GetArrayType(uint64_t elem_count) {
+    return llvm::ArrayType::get(this->GetIntegerType(), elem_count);
+}

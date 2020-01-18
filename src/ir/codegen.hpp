@@ -48,6 +48,9 @@ public:
     llvm::BasicBlock *popBlock();
     std::map<std::string, symtab_t> getFunctionLocals();
 
+    llvm::Type *GetIntegerType();
+    llvm::Type *GetArrayType(uint64_t elem_count);
+
     virtual antlrcpp::Any visitProgram(ZParser::ProgramContext *context);
     virtual antlrcpp::Any visitExpression(ZParser::ExpressionContext *context);
     virtual antlrcpp::Any visitConstExpr(ZParser::ConstExprContext *context);
