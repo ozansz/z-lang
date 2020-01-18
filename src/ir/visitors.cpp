@@ -12,9 +12,7 @@ antlrcpp::Any ZLLVMIRGenerator::visitProgram(ZParser::ProgramContext *context) {
     
     this->popBlock();
 }
-    
-//virtual antlrcpp::Any visitExpression(ZParser::ExpressionContext *context);
-//virtual antlrcpp::Any visitConstExpr(ZParser::ConstExprContext *context);
+
 //virtual antlrcpp::Any visitIDExpr(ZParser::IDExprContext *context);
 //virtual antlrcpp::Any visitSExpr(ZParser::SExprContext *context);
 //virtual antlrcpp::Any visitFunction_call_expression(ZParser::Function_call_expressionContext *context);
